@@ -19,10 +19,11 @@ function markUnpatrolledContribs (){
 		param.rcuser = mw.config.get( 'wgRelevantUserName' );
 	}
 	( new mw.Api() ).get( param ).done( function( data ){
-		var unpatrolled = [], $marker;
+		var unpatrolled = [], $marker,
+			pg = mw.config.get( 'wgPageName' ).replace( /_/g, ' ' );
 		$.each( data.query.recentchanges, function(){
 			if( this.unpatrolled !== ''
-				|| ( mw.config.get( 'wgAction' ) === 'history' && this.title !== mw.config.get( 'wgPageName' ) )
+				|| ( mw.config.get( 'wgAction' ) === 'history' && this.title !== pg )
 			){
 				// Continue
 				return true;
