@@ -9,16 +9,21 @@
 'use strict';
 
 function markUnpatrolledContribs (){
-	( new mw.Api() ).get( {
+	var param = {
 		action: 'query',
 		list: 'recentchanges',
-		rcuser: mw.config.get( 'wgRelevantUserName' ),
 		rcprop: 'timestamp|title|ids|patrolled',
 		rclimit: 'max'
-	} ).done( function( data ){
+	};
+	if( mw.config.get( 'wgAction' ) !== 'history' ){
+		param.rcuser = mw.config.get( 'wgRelevantUserName' );
+	}
+	( new mw.Api() ).get( param ).done( function( data ){
 		var unpatrolled = [], $marker;
 		$.each( data.query.recentchanges, function(){
-			if( this.unpatrolled !== '' ){
+			if( this.unpatrolled !== ''
+				|| ( mw.config.get( 'wgAction' ) === 'history' && this.title !== mw.config.get( 'wgPageName' ) )
+			){
 				// Continue
 				return true;
 			}
@@ -42,7 +47,7 @@ function markUnpatrolledContribs (){
 	} );
 }
 
-if( mw.config.get( 'wgCanonicalSpecialPageName' ) === 'Contributions' ){
+if( mw.config.get( 'wgCanonicalSpecialPageName' ) === 'Contributions' || mw.config.get( 'wgAction' ) === 'history'  ){
 	mw.loader.using( [ 'mediawiki.api' ], function() {
 		$( markUnpatrolledContribs );
 	} );
