@@ -36,9 +36,12 @@ function markUnpatrolledContribs (){
 		$( '#mw-content-text' ).find( 'li' ).each( function(){
 			var i,
 				$this = $(this),
-				html = $this.html();
+				href = $this.find( 'a.mw-changeslist-date' ).attr( 'href' );
+			if( !href ){
+				return true;
+			}
 			for( i = 0; i < unpatrolled.length; i++ ){
-				if( html.indexOf( 'oldid=' + unpatrolled[i] ) !== -1 ){
+				if( href.indexOf( 'oldid=' + unpatrolled[i] ) !== -1 ){
 					$this.prepend( $marker.clone(), ' ' )
 						.css( 'background', '#FFC' );
 				}
