@@ -1,5 +1,5 @@
 /**
- * Mark unpatrolled contributions of a given user with "!" on [[Special:Contributions]]
+ * Mark unpatrolled contributions of a given user with "!" on [[Special:Contributions]] and the history of pages
  * @author: [[User:Helder.wiki]]
  * @tracking: [[Special:GlobalUsage/User:Helder.wiki/Tools/MarkUnpatrolledContribs.js]] ([[File:User:Helder.wiki/Tools/MarkUnpatrolledContribs.js]])
  */
