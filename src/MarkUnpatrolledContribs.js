@@ -1,10 +1,15 @@
 /**
  * Mark unpatrolled contributions of a given user with "!" on [[Special:Contributions]] and the history of pages
+ *
  * @author: Helder (https://github.com/he7d3r)
  * @license: CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0/>
  */
 ( function ( mw, $ ) {
 	'use strict';
+	mw.messages.set( {
+		// [[MediaWiki:Recentchanges-label-unpatrolled]]
+		'muc-recentchanges-label-unpatrolled': 'Esta edição ainda não foi patrulhada'
+	} );
 
 	function markUnpatrolledContribs() {
 		var param = {
@@ -32,7 +37,8 @@
 			if ( unpatrolled.length === 0 ) {
 				return;
 			}
-			$marker = $( '<abbr class="unpatrolled" title="Esta edição ainda não foi patrulhada">!</abbr>' );
+			$marker = $( '<abbr class="unpatrolled">!</abbr>' )
+				.attr( 'title', mw.msg( 'muc-recentchanges-label-unpatrolled' ) );
 			$( '#mw-content-text' ).find( 'li' ).each( function () {
 				var i,
 					$this = $( this ),
@@ -41,9 +47,9 @@
 					return true;
 				}
 				for ( i = 0; i < unpatrolled.length; i++ ) {
-					if ( href.indexOf( 'oldid=' + unpatrolled[i] ) !== -1 ) {
+					if ( href.indexOf( 'oldid=' + unpatrolled[ i ] ) !== -1 ) {
 						$this.prepend( $marker.clone(), ' ' )
-							.css( 'background', '#FFC' );
+							.addClass( 'not-patrolled' );
 					}
 				}
 			} );
@@ -51,9 +57,10 @@
 	}
 
 	if ( mw.config.get( 'wgCanonicalSpecialPageName' ) === 'Contributions' || mw.config.get( 'wgAction' ) === 'history' ) {
-		mw.loader.using( [ 'mediawiki.api' ], function () {
-			$( markUnpatrolledContribs );
-		} );
+		$.when(
+			mw.loader.using( [ 'mediawiki.api' ] ),
+			$.ready
+		).then( markUnpatrolledContribs );
 	}
 
 }( mediaWiki, jQuery ) );
