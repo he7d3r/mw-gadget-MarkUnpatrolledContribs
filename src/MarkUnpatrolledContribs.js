@@ -22,8 +22,10 @@
 			}
 			for ( i = 0; i < revids.length; i++ ) {
 				if ( href.indexOf( 'oldid=' + revids[ i ] ) !== -1 ) {
-					$this.prepend( $marker.clone(), ' ' )
-						.addClass( 'not-patrolled' );
+					$this
+						.addClass( 'not-patrolled' )
+						.find( '.mw-contributions-title' )
+						.prepend( $marker.clone(), ' ' );
 				}
 			}
 		} );
